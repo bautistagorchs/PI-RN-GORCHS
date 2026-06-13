@@ -12,7 +12,6 @@ const Register = ({ navigation }) => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    console.log("Current user in Register screen:", auth.currentUser?.email);
     if (auth.currentUser) {
       navigation.navigate("Cortado");
     }
@@ -99,12 +98,6 @@ const Register = ({ navigation }) => {
       >
         <Text style={s.buttonText}>Already have an account? Login</Text>
       </Pressable>
-      <Pressable
-        style={[s.button, { backgroundColor: "#e53e3e", marginTop: 12 }]}
-        onPress={logout}
-      >
-        <Text style={s.buttonText}>Logout</Text>
-      </Pressable>
     </View>
   );
 };
@@ -136,7 +129,7 @@ const s = StyleSheet.create({
     color: "#1a1a1a",
   },
   button: {
-    backgroundColor: "#4f46e5",
+    backgroundColor: "#ff9800",
     width: "100%",
     paddingVertical: 14,
     borderRadius: 8,

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -15,6 +15,7 @@ const CrearPost = ({ navigation }) => {
   const [descripcion, setDescripcion] = useState("");
   const [photoUri, setPhotoUri] = useState(null);
   const [showCamera, setShowCamera] = useState(false);
+  const [user, setUser] = useState(null);
 
   const showToast = (type, text1, text2) => {
     Toast.show({
@@ -23,6 +24,21 @@ const CrearPost = ({ navigation }) => {
       text2: text2,
     });
   };
+
+  useEffect(() => {
+    db.collection("users")
+      .where("email", "==", auth.currentUser?.email)
+      .get()
+      .then((snapshot) => {
+        if (!snapshot.empty) {
+          const userData = snapshot.docs[0].data();
+          setUser(userData);
+        }
+      })
+      .catch((error) => {
+        console.error("Error al obtener datos del usuario:", error);
+      });
+  });
 
   const publicar = () => {
     if (!descripcion.trim()) {
@@ -42,6 +58,7 @@ const CrearPost = ({ navigation }) => {
         descripcion,
         imagen: photoUri,
         email: auth.currentUser.email,
+        username: user.username || "Usuario",
         fecha: new Date(),
         likes: [],
         comments: [],
@@ -157,7 +174,7 @@ const s = StyleSheet.create({
     backgroundColor: "#ccc",
   },
   boton: {
-    backgroundColor: "#4f46e5",
+    backgroundColor: "#ff9800",
     padding: 14,
     borderRadius: 8,
     alignItems: "center",

@@ -33,16 +33,18 @@ const MiPerfil = ({ navigation }) => {
       .then(() => {
         db.collection("posts")
           .where("email", "==", user?.email)
-          .get()
-          .then((snapshot) => {
-            const posts = snapshot.docs.map((doc) => ({
-              id: doc.id,
-              ...doc.data(),
-            }));
+          .onSnapshot((docs) => {
+            const posts = [];
+            docs.docs.forEach((doc) =>
+              posts.push({
+                id: doc.id,
+                data: doc.data(),
+              }),
+            );
             setUserPosts(posts);
+            setLoading(false);
           });
       })
-      .then(() => setLoading(false))
       .catch((error) => {
         console.error("Error al obtener datos del usuario:", error);
         setLoading(false);
@@ -57,7 +59,7 @@ const MiPerfil = ({ navigation }) => {
   if (loading) {
     return (
       <View style={s.loading}>
-        <ActivityIndicator size="large" color="#4f46e5" />
+        <ActivityIndicator size="large" color="#ff9800" />
       </View>
     );
   }
@@ -84,7 +86,7 @@ const MiPerfil = ({ navigation }) => {
           ) : (
             userPosts.map((post) => (
               <View key={post.id} style={s.postItem}>
-                <Text style={s.postTitle}>{post.descripcion}</Text>
+                <Text style={s.postTitle}>{post.data.descripcion}</Text>
                 {/* <Image source={{ uri: post.imagen }} style={s.postImage} /> */}
               </View>
             ))
@@ -125,7 +127,7 @@ const s = StyleSheet.create({
     marginBottom: 8,
   },
   button: {
-    backgroundColor: "#4f46e5",
+    backgroundColor: "#ff9800",
     paddingVertical: 14,
     borderRadius: 8,
     alignItems: "center",
@@ -158,7 +160,7 @@ const s = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    color: "#4f46e5",
+    color: "#ff9800",
   },
 });
 

@@ -7,7 +7,6 @@ const Login = ({ navigation }) => {
   const [password, setPassword] = useState("");
 
   useEffect(() => {
-    console.log("Current user in Login screen:", auth.currentUser?.email);
     if (auth.currentUser) {
       navigation.navigate("Cortado");
     }
@@ -83,7 +82,7 @@ const s = StyleSheet.create({
     color: "#1a1a1a",
   },
   button: {
-    backgroundColor: "#4f46e5",
+    backgroundColor: "#ff9800",
     width: "100%",
     paddingVertical: 14,
     borderRadius: 8,
