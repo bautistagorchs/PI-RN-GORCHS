@@ -7,12 +7,11 @@ const Login = ({ navigation }) => {
   const [password, setPassword] = useState("");
 
   useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        navigation.navigate("Cortado");
-      }
-    });
-  }, []);
+    console.log("Current user in Login screen:", auth.currentUser?.email);
+    if (auth.currentUser) {
+      navigation.navigate("Cortado");
+    }
+  }, [navigation]);
 
   const onSubmit = () => {
     auth
@@ -49,7 +48,7 @@ const Login = ({ navigation }) => {
       </Pressable>
       <Pressable
         style={[s.button, { backgroundColor: "#6b7280", marginTop: 12 }]}
-        onPress={() => navigation.navigate("register")}
+        onPress={() => navigation.navigate("Register")}
       >
         <Text style={s.buttonText}>Don't have an account? Register</Text>
       </Pressable>

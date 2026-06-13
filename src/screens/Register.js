@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Pressable, TextInput, View, Text, StyleSheet } from "react-native";
 import { auth, db } from "../config/firebase";
+import Toast from "react-native-toast-message";
 
 const Register = ({ navigation }) => {
   const [formValues, setFormValues] = useState({
@@ -11,7 +12,8 @@ const Register = ({ navigation }) => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (auth.onAuthStateChanged) {
+    console.log("Current user in Register screen:", auth.currentUser?.email);
+    if (auth.currentUser) {
       navigation.navigate("Cortado");
     }
   }, []);
@@ -27,6 +29,13 @@ const Register = ({ navigation }) => {
             username: formValues.username,
             password: formValues.password,
           })
+          .then(() => {
+            Toast.show({
+              type: "success",
+              text1: "Registrado exitosamente",
+              text2: "Ya podés iniciar sesión con tu cuenta",
+            });
+          })
           .then(() => navigation.navigate("Login"))
           .catch((error) => console.error(error)),
       )
@@ -34,6 +43,11 @@ const Register = ({ navigation }) => {
         console.error("Registration error:", error);
         // alert("Registration failed: " + error.message);
         setError(error.message);
+        Toast.show({
+          type: "error",
+          text1: "Registration failed",
+          text2: error.message,
+        });
       });
   };
 
